@@ -88,10 +88,50 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./helpers/checkWindow.ts":
+/*!********************************!*\
+  !*** ./helpers/checkWindow.ts ***!
+  \********************************/
+/*! exports provided: checkWindowExists */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkWindowExists", function() { return checkWindowExists; });
+const checkWindowExists = () => false;
+
+/***/ }),
+
+/***/ "./helpers/getLocation.ts":
+/*!********************************!*\
+  !*** ./helpers/getLocation.ts ***!
+  \********************************/
+/*! exports provided: getLocation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocation", function() { return getLocation; });
+/* harmony import */ var _checkWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkWindow */ "./helpers/checkWindow.ts");
+
+const getLocation = () => {
+  const showPosition = position => console.log(position);
+
+  if (!_checkWindow__WEBPACK_IMPORTED_MODULE_0__["checkWindowExists"]) return;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    console.log("Browser not supporting location");
+  }
+};
+
+/***/ }),
 
 /***/ "./pages/index.tsx":
 /*!*************************!*\
@@ -104,26 +144,89 @@ module.exports =
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers_getLocation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/getLocation */ "./helpers/getLocation.ts");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/head */ "next/head");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_map_gl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-map-gl */ "react-map-gl");
+/* harmony import */ var react_map_gl__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_map_gl__WEBPACK_IMPORTED_MODULE_3__);
 var _jsxFileName = "/Users/isakfagerlund/Projects/breathtaker/pages/index.tsx";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+
+
+
+
+
 function HomePage() {
-  return __jsx("div", {
+  const {
+    0: viewport,
+    1: setViewport
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    width: 500,
+    height: 500,
+    latitude: 37.7577,
+    longitude: -122.4376,
+    zoom: 8
+  });
+  const {
+    0: userLocation,
+    1: setUserLocation
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])();
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    console.log(window);
+    const location = Object(_helpers_getLocation__WEBPACK_IMPORTED_MODULE_1__["getLocation"])();
+    console.log(location.coords.longitude);
+  }, []);
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(next_head__WEBPACK_IMPORTED_MODULE_2___default.a, {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 2,
-      columnNumber: 10
+      lineNumber: 26,
+      columnNumber: 7
     }
-  }, "Welcome to Breathtaker");
+  }, __jsx("title", {
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 27,
+      columnNumber: 9
+    }
+  }, "Breathtaker"), __jsx("link", {
+    href: "https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css",
+    rel: "stylesheet",
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28,
+      columnNumber: 9
+    }
+  })), __jsx("div", {
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 30,
+      columnNumber: 7
+    }
+  }, "Welcome to Breathtaker"), userLocation, __jsx(react_map_gl__WEBPACK_IMPORTED_MODULE_3___default.a, _extends({}, viewport, {
+    mapboxApiAccessToken: "pk.eyJ1IjoiaXNha2ZhZ2VybHVuZCIsImEiOiJjazk0N3Fmb2IwNzE3M2ZueW5xMTlyNHZ0In0.C6orLl-bf2DeGZP1T2fMWQ",
+    onViewportChange: view => setViewport(view),
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 32,
+      columnNumber: 7
+    }
+  })));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (HomePage);
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!*******************************!*\
   !*** multi ./pages/index.tsx ***!
   \*******************************/
@@ -135,6 +238,17 @@ module.exports = __webpack_require__(/*! /Users/isakfagerlund/Projects/breathtak
 
 /***/ }),
 
+/***/ "next/head":
+/*!****************************!*\
+  !*** external "next/head" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/head");
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "react" ***!
@@ -143,6 +257,17 @@ module.exports = __webpack_require__(/*! /Users/isakfagerlund/Projects/breathtak
 /***/ (function(module, exports) {
 
 module.exports = require("react");
+
+/***/ }),
+
+/***/ "react-map-gl":
+/*!*******************************!*\
+  !*** external "react-map-gl" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-map-gl");
 
 /***/ })
 

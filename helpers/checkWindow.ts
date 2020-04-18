@@ -1,0 +1,1 @@
+export const checkWindowExists = () => typeof window !== 'undefined';
