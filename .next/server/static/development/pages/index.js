@@ -120,12 +120,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkWindow */ "./helpers/checkWindow.ts");
 
 const getLocation = () => {
-  const showPosition = position => console.log(position);
+  const onSuccess = position => position;
+
+  const onFailure = err => err;
 
   if (!_checkWindow__WEBPACK_IMPORTED_MODULE_0__["checkWindowExists"]) return;
 
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
+    const getLocations = () => {
+      navigator.geolocation.getCurrentPosition(onSuccess, onFailure).then(res => console.log(res));
+    };
+
+    console.log(getLocations());
   } else {
     console.log("Browser not supporting location");
   }
@@ -174,24 +180,27 @@ function HomePage() {
   const {
     0: userLocation,
     1: setUserLocation
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])();
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    console.log(window);
-    const location = Object(_helpers_getLocation__WEBPACK_IMPORTED_MODULE_1__["getLocation"])();
-    console.log(location.coords.longitude);
+    const asyncGetLocation = async () => {
+      const currentLocation = await Object(_helpers_getLocation__WEBPACK_IMPORTED_MODULE_1__["getLocation"])();
+      console.log(currentLocation); // setUserLocation(currentLocation)
+    };
+
+    asyncGetLocation();
   }, []);
   return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(next_head__WEBPACK_IMPORTED_MODULE_2___default.a, {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 26,
+      lineNumber: 36,
       columnNumber: 7
     }
   }, __jsx("title", {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 27,
+      lineNumber: 37,
       columnNumber: 9
     }
   }, "Breathtaker"), __jsx("link", {
@@ -200,23 +209,23 @@ function HomePage() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 28,
+      lineNumber: 38,
       columnNumber: 9
     }
   })), __jsx("div", {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 30,
+      lineNumber: 40,
       columnNumber: 7
     }
-  }, "Welcome to Breathtaker"), userLocation, __jsx(react_map_gl__WEBPACK_IMPORTED_MODULE_3___default.a, _extends({}, viewport, {
+  }, "Welcome to Breathtaker"), console.log(userLocation), __jsx(react_map_gl__WEBPACK_IMPORTED_MODULE_3___default.a, _extends({}, viewport, {
     mapboxApiAccessToken: "pk.eyJ1IjoiaXNha2ZhZ2VybHVuZCIsImEiOiJjazk0N3Fmb2IwNzE3M2ZueW5xMTlyNHZ0In0.C6orLl-bf2DeGZP1T2fMWQ",
     onViewportChange: view => setViewport(view),
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32,
+      lineNumber: 42,
       columnNumber: 7
     }
   })));
