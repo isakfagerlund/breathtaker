@@ -9,16 +9,10 @@ interface Location {
 }
 
 
-export const getLocation = (): Location => {
-  const onSuccess = position => position
-  const onFailure = err => err
+export const getLocation = (onSuccess, onFailure): Location => {
   if (!checkWindowExists) return
   if (navigator.geolocation) {
-    const getLocations = () => {
-      navigator.geolocation.getCurrentPosition(onSuccess, onFailure).then( res => console.log(res))
-    }
-    
-    console.log(getLocations())
+      navigator.geolocation.getCurrentPosition(onSuccess, onFailure)
   } else {
     console.log("Browser not supporting location")
   }

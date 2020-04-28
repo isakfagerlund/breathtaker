@@ -119,19 +119,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocation", function() { return getLocation; });
 /* harmony import */ var _checkWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkWindow */ "./helpers/checkWindow.ts");
 
-const getLocation = () => {
-  const onSuccess = position => position;
-
-  const onFailure = err => err;
-
+const getLocation = (onSuccess, onFailure) => {
   if (!_checkWindow__WEBPACK_IMPORTED_MODULE_0__["checkWindowExists"]) return;
 
   if (navigator.geolocation) {
-    const getLocations = () => {
-      navigator.geolocation.getCurrentPosition(onSuccess, onFailure).then(res => console.log(res));
-    };
-
-    console.log(getLocations());
+    navigator.geolocation.getCurrentPosition(onSuccess, onFailure);
   } else {
     console.log("Browser not supporting location");
   }
@@ -155,7 +147,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_map_gl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-map-gl */ "react-map-gl");
 /* harmony import */ var react_map_gl__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_map_gl__WEBPACK_IMPORTED_MODULE_3__);
-var _jsxFileName = "/Users/isakfagerlund/Projects/breathtaker/pages/index.tsx";
+var _jsxFileName = "/Users/isakfagerlund/Documents/Projects/breathtaker/pages/index.tsx";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -180,11 +172,21 @@ function HomePage() {
   const {
     0: userLocation,
     1: setUserLocation
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    latitude: 0,
+    longitude: 0,
+    accuracy: 0
+  });
+
+  const onSuccess = data => {
+    setUserLocation(data.coords);
+  };
+
+  const onFailure = err => console.log(err);
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
     const asyncGetLocation = async () => {
-      const currentLocation = await Object(_helpers_getLocation__WEBPACK_IMPORTED_MODULE_1__["getLocation"])();
-      console.log(currentLocation); // setUserLocation(currentLocation)
+      Object(_helpers_getLocation__WEBPACK_IMPORTED_MODULE_1__["getLocation"])(onSuccess, onFailure);
     };
 
     asyncGetLocation();
@@ -193,14 +195,14 @@ function HomePage() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 37,
       columnNumber: 7
     }
   }, __jsx("title", {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 38,
       columnNumber: 9
     }
   }, "Breathtaker"), __jsx("link", {
@@ -209,23 +211,37 @@ function HomePage() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
+      lineNumber: 39,
       columnNumber: 9
     }
   })), __jsx("div", {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 40,
+      lineNumber: 41,
       columnNumber: 7
     }
-  }, "Welcome to Breathtaker"), console.log(userLocation), __jsx(react_map_gl__WEBPACK_IMPORTED_MODULE_3___default.a, _extends({}, viewport, {
+  }, "Welcome to Breathtaker"), __jsx("p", {
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 42,
+      columnNumber: 7
+    }
+  }, "Your latitude: ", userLocation.latitude), __jsx("p", {
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 43,
+      columnNumber: 7
+    }
+  }, "Your longitude: ", userLocation.longitude), __jsx(react_map_gl__WEBPACK_IMPORTED_MODULE_3___default.a, _extends({}, viewport, {
     mapboxApiAccessToken: "pk.eyJ1IjoiaXNha2ZhZ2VybHVuZCIsImEiOiJjazk0N3Fmb2IwNzE3M2ZueW5xMTlyNHZ0In0.C6orLl-bf2DeGZP1T2fMWQ",
     onViewportChange: view => setViewport(view),
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 42,
+      lineNumber: 44,
       columnNumber: 7
     }
   })));
@@ -242,7 +258,7 @@ function HomePage() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/isakfagerlund/Projects/breathtaker/pages/index.tsx */"./pages/index.tsx");
+module.exports = __webpack_require__(/*! /Users/isakfagerlund/Documents/Projects/breathtaker/pages/index.tsx */"./pages/index.tsx");
 
 
 /***/ }),
