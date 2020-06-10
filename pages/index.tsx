@@ -33,7 +33,7 @@ function HomePage() {
       <div>Welcome to Breathtaker</div>
       <p>Your latitude: {userLocation.latitude}</p>
       <p>Your longitude: {userLocation.longitude}</p>
-      <Map />
+      <Map lat={userLocation.latitude} long={userLocation.longitude}  />
     </>
   )
 }
