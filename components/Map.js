@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MapGL, { Marker, Layer } from 'react-map-gl';
+import MapGL, { Marker, Layer, GeolocateControl } from 'react-map-gl';
 import { featureCollection, point } from '@turf/helpers';
 
 const initialViewport = {
@@ -7,7 +7,7 @@ const initialViewport = {
   height: 500,
   latitude: 42.376,
   longitude: -83.093,
-  zoom: 12
+  zoom: 14
 }
 
 const Map = ({ lat, long }) => {
@@ -25,9 +25,12 @@ const Map = ({ lat, long }) => {
       mapboxApiAccessToken="pk.eyJ1IjoiaXNha2ZhZ2VybHVuZCIsImEiOiJjazk0N3Fmb2IwNzE3M2ZueW5xMTlyNHZ0In0.C6orLl-bf2DeGZP1T2fMWQ"
       onViewportChange={(view) => setViewport(view)}
     >
-      <Marker latitude={lat} longitude={long} offsetLeft={-20} offsetTop={-10}>
-          <div className="marker"></div>
-      </Marker>
+      <GeolocateControl
+          positionOptions={{enableHighAccuracy: true}}
+          onViewportChange={view => setViewport({...view, zoom: 16})}
+          auto={true}
+          trackUserLocation={true}
+      />
     </MapGL>
   )
 }

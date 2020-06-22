@@ -21,7 +21,7 @@ function HomePage() {
       getLocation(onSuccess, onFailure)
     }
  
-    asyncGetLocation()
+    // asyncGetLocation()
   }, [])
 
   return (
@@ -30,9 +30,9 @@ function HomePage() {
         <title>Breathtaker</title>
         <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
       </Head>
-      <div>Welcome to Breathtaker</div>
+      {/* <div>Welcome to Breathtaker</div>
       <p>Your latitude: {userLocation.latitude}</p>
-      <p>Your longitude: {userLocation.longitude}</p>
+      <p>Your longitude: {userLocation.longitude}</p> */}
       <Map lat={userLocation.latitude} long={userLocation.longitude}  />
     </>
   )
