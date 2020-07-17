@@ -11,7 +11,7 @@ const objectToArray = obj => {
 export const assembleQueryURL = (truckLocation, warehouseLocation, pointHopper, mapBoxToken) => {
   
   // Store the location of the truck in a variable called coordinates
-  const coordinates = [truckLocation];
+  const coordinates = [truckLocation, warehouseLocation];
   const distributions = [];
   keepTrack = [truckLocation];
 
@@ -49,5 +49,5 @@ export const assembleQueryURL = (truckLocation, warehouseLocation, pointHopper, 
 
   // Set the profile to `walking`
   // Coordinates will include the current location of the truck,
-  return `https://api.mapbox.com/optimized-trips/v1/mapbox/walking/${coordinates.join(';')}?distributions=${distributions.join(';')}&overview=full&steps=true&geometries=geojson&source=first&access_token=${mapBoxToken}`;
+  return `https://api.mapbox.com/optimized-trips/v1/mapbox/walking/${coordinates.join(';')}&overview=full&steps=true&geometries=geojson&source=first&access_token=${mapBoxToken}`;
 }
