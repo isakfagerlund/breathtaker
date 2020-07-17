@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { featureCollection, point, feature } from '@turf/helpers';
-import { assembleQueryURL } from '../helpers/assembleQueryURL';
 import { generateLocation } from '../helpers/genereateRandomLocation';
 import { randomCircumferencePoint } from 'random-location'
 import axios from 'axios';
