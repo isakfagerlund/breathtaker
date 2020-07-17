@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { featureCollection, point, feature } from '@turf/helpers';
+import { assembleQueryURL } from '../helpers/assembleQueryURL';
 import axios from 'axios';
 import mapboxgl from 'mapbox-gl';
 
-mapboxgl.accessToken = "pk.eyJ1IjoiaXNha2ZhZ2VybHVuZCIsImEiOiJjazk0N3Fmb2IwNzE3M2ZueW5xMTlyNHZ0In0.C6orLl-bf2DeGZP1T2fMWQ"
+const mapBoxToken = "pk.eyJ1IjoiaXNha2ZhZ2VybHVuZCIsImEiOiJjazk0N3Fmb2IwNzE3M2ZueW5xMTlyNHZ0In0.C6orLl-bf2DeGZP1T2fMWQ";
+mapboxgl.accessToken = mapBoxToken;
 
 const truckLocation = [-83.093, 42.376];
 const warehouseLocation = [-83.083, 42.363];
 const lastQueryTime = 0;
-const lastAtRestaurant = 0;
-let keepTrack = [];
-let restaurantIndex = "";
 const currentSchedule = [];
 const currentRoute = null;
-const pointHopper = {};
+let pointHopper = {};
 const pause = true;
 const speedFactor = 50;
 const warehouse = featureCollection([point(warehouseLocation)]);
@@ -27,57 +26,6 @@ const initialMapState = {
   zoom: 2
 };
 
-// Here you'll specify all the parameters necessary for requesting a response from the Optimization API
-const assembleQueryURL = () => {
-
-  // Store the location of the truck in a variable called coordinates
-  const coordinates = [truckLocation];
-  const distributions = [];
-  keepTrack = [truckLocation];
-
-  // Create an array of GeoJSON feature collections for each point
-  const restJobs = objectToArray(pointHopper);
-
-  // If there are any orders from this restaurant
-  if (restJobs.length > 0) {
-
-    // Check to see if the request was made after visiting the restaurant
-    const needToPickUp = restJobs.filter(function(d, i) {
-      return d.properties.orderTime > lastAtRestaurant;
-    }).length > 0;
-
-    // If the request was made after picking up from the restaurant,
-    // Add the restaurant as an additional stop
-    if (needToPickUp) {
-      restaurantIndex = coordinates.length;
-      // Add the restaurant as a coordinate
-      coordinates.push(warehouseLocation);
-      // push the restaurant itself into the array
-      keepTrack.push(pointHopper.warehouse);
-    }
-
-    restJobs.forEach(function(d, i) {
-      // Add dropoff to list
-      keepTrack.push(d);
-      coordinates.push(d.geometry.coordinates);
-      // if order not yet picked up, add a reroute
-      if (needToPickUp && d.properties.orderTime > lastAtRestaurant) {
-        distributions.push(restaurantIndex + ',' + (coordinates.length - 1));
-      }
-    });
-  }
-
-  // Set the profile to `driving`
-  // Coordinates will include the current location of the truck,
-  return 'https://api.mapbox.com/optimized-trips/v1/mapbox/driving/' + coordinates.join(';') + '?distributions=' + distributions.join(';') + '&overview=full&steps=true&geometries=geojson&source=first&access_token=' + mapboxgl.accessToken;
-}
-
-const objectToArray = obj => {
-  const keys = Object.keys(obj);
-  const routeGeoJSON = keys.map(key => obj[key]);
-  return routeGeoJSON;
-}
-
 const Map = () => {
   const [mapState, setMapState] = useState(initialMapState);
   const mapContainer = useRef(null);
@@ -89,6 +37,17 @@ const Map = () => {
       center: truckLocation,
       zoom: 12
     });
+
+    // Add geolocate control to the map.
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        showAccuracyCircle: false,
+        trackUserLocation: true
+      })
+    );
 
     const newDropoff = coords => {
       // Store the clicked point as a new GeoJSON feature with
@@ -103,7 +62,7 @@ const Map = () => {
       dropoffs.features.push(pt);
       pointHopper[pt.properties.key] = pt;
     
-      axios.get(assembleQueryURL())
+      axios.get(assembleQueryURL(truckLocation, warehouseLocation, pointHopper, mapBoxToken))
         .then(({data}) => {
           // Create a GeoJSON feature collection
           var routeGeoJSON = featureCollection([feature(data.trips[0].geometry)]);
