@@ -62,6 +62,7 @@ const Map = ({ userLocation, setUserLocation }) => {
       });
   
       map.on('load', () => {
+        geoLocate.trigger();
         map.addSource('route', {
           type: 'geojson',
           data: nothing
@@ -122,10 +123,11 @@ const Map = ({ userLocation, setUserLocation }) => {
 
   return (
     <>
-      <div ref={el => (mapContainer.current = el)} className="mapContainer" />
-      <div className="button">
-        <button onClick={() => getNavigation()}>Get route</button>
-      </div>   
+      <div ref={el => (mapContainer.current = el)} className="mapContainer" >
+        <div className="button">
+          <button onClick={() => getNavigation()}>Get route</button>
+        </div>  
+      </div>
     </>
   )
 }
