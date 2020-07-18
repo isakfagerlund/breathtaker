@@ -11,11 +11,12 @@ mapboxgl.accessToken = mapBoxToken;
 // Create an empty GeoJSON feature collection for drop-off locations
 const dropoffs = featureCollection([]);
 const nothing = featureCollection([]);
+let map;
 
 const Map = ({ userLocation, setUserLocation }) => {
   const [routeDetails, setRouteDetails] = useState({})
+  const [hasRoute, setHasRoute] = useState(false);
   const mapContainer = useRef(null);
-  let map;
 
   const getNavigation = coords => {
     const stopOne = randomCircumferencePoint({ latitude: userLocation[0], longitude: userLocation[1] }, 500)
@@ -30,9 +31,12 @@ const Map = ({ userLocation, setUserLocation }) => {
         const route = data.routes[0];
         const { distance, duration } = route;
         var routeGeoJSON = featureCollection([feature(route.geometry)]);
-        
+
         map.getSource('route')
           .setData(routeGeoJSON);
+
+        setHasRoute(true)
+        
       })
       .catch(error => console.log(error))
   }
@@ -124,8 +128,11 @@ const Map = ({ userLocation, setUserLocation }) => {
   return (
     <>
       <div ref={el => (mapContainer.current = el)} className="mapContainer" >
-        <div className="button">
-          <button onClick={() => getNavigation()}>Get route</button>
+        <div className="top">
+          {hasRoute && <button onClick={() => getNavigation()}>♻</button>}
+        </div>  
+        <div className="bottom">
+          {!hasRoute && <button onClick={() => getNavigation()}>Get route</button>}
         </div>  
       </div>
     </>
